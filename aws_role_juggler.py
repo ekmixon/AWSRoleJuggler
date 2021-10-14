@@ -9,6 +9,7 @@ import time
 ACCESS_ID = "AWS_ACCESS_KEY_ID"
 SECRET_KEY = "AWS_SECRET_ACCESS_KEY"
 SESSION_KEY = "AWS_SESSION_TOKEN"
+DEFAULT_ROLE = "arn:aws:iam::629622723674:role/fizz-deploy-role"
 
 def assumeRole(client, arn):
     response = client.assume_role (
@@ -28,7 +29,7 @@ def assumeRole(client, arn):
     credentials = response['Credentials']
     print(f"[*] Expiration: {credentials['Expiration']}")
 
-    #print(f"{credentials['AccessKeyId']}\n{credentials['SecretAccessKey']}\n{credentials['SessionToken']}\n")
+    print(f"{credentials['AccessKeyId']}\n{credentials['SecretAccessKey']}\n{credentials['SessionToken']}\n")
 
     session = boto3.session.Session(aws_access_key_id=credentials['AccessKeyId'],
                                     aws_secret_access_key = credentials['SecretAccessKey'],
@@ -39,10 +40,8 @@ def assumeRole(client, arn):
 
 def juggleRoles(roleList):
     client = boto3.client('sts') 
-
     first_role = roleList.pop(0)
     roleList.append(first_role)
-
     client = assumeRole(client, first_role)
     # Do the first role assumption
 
@@ -59,7 +58,7 @@ def juggleRoles(roleList):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('-r', '--role-list', nargs='+', default=[])
+    parser.add_argument('-r', '--role-list', nargs='+', default=[DEFAULT_ROLE])
     args = parser.parse_args()
 
     juggleRoles(args.role_list)

@@ -28,7 +28,7 @@ def assumeRole(client, arn):
     credentials = response['Credentials']
     print(f"[*] Expiration: {credentials['Expiration']}")
 
-    print(f"{credentials['AccessKeyId']}\n{credentials['SecretAccessKey']}\n{credentials['SessionToken']}\n")
+    #print(f"{credentials['AccessKeyId']}\n{credentials['SecretAccessKey']}\n{credentials['SessionToken']}\n")
 
     session = boto3.session.Session(aws_access_key_id=credentials['AccessKeyId'],
                                     aws_secret_access_key = credentials['SecretAccessKey'],

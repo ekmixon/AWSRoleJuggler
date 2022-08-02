@@ -25,9 +25,8 @@ def getCycles(aws_roles):
                 else:
                     dest  =arns
                     g.add_edges_from([(source, dest)])
-                
-    cycles = list(nx.simple_cycles(g))
-    return cycles
+
+    return list(nx.simple_cycles(g))
 
 if __name__ == "__main__":
     client = boto3.client('iam')
